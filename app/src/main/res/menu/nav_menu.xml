@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/grp1"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/enter_product"
+            android:checked="true"
+            android:title="Enter Product" />
+
+        <item
+            android:id="@+id/enter_coupon"
+            android:checked="false"
+            android:title="Enter Coupon" />
+        <item
+            android:id="@+id/all_product"
+            android:checked="false"
+            android:title="All Product" />
+
+    </group>
+
+</menu>
