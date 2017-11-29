@@ -70,15 +70,15 @@ public class MainActivity extends AppCompatActivity {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
+                                fragTransaction = getSupportFragmentManager().beginTransaction();
 
-                                FragmentTransaction fTransaction = fragmentManager.beginTransaction();
                                 Fragment fragment = fragmentManager.findFragmentByTag("uniqueTag");
                                 Log.e("frag", fragment + "");
                                 // If fragment doesn't exist yet, create one
                                 if (fragment == null) {
-                                    fTransaction.add(content.getId(), new EnterProductFragment(), "uniqueTag").commit();
+                                    fragTransaction.replace(content.getId(), new EnterProductFragment(), "uniqueTag").commit();
                                 } else { // re-use the old fragment
-                                    fTransaction.replace(content.getId(), fragment, "uniqueTag").commit();
+                                    fragTransaction.replace(content.getId(), fragment, "uniqueTag").commit();
                                 }
 
                                 toolbar.setTitle(getResources().getString(R.string.app_name));
@@ -95,14 +95,16 @@ public class MainActivity extends AppCompatActivity {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                FragmentTransaction fTransaction = fragmentManager.beginTransaction();
+                                fragTransaction = getSupportFragmentManager().beginTransaction();
+                              //  FragmentTransaction fTransaction = fragmentManager.beginTransaction();
                                 Fragment fragment = fragmentManager.findFragmentByTag("tag2");
                                 Log.e("frag2", fragment + "");
                                 // If fragment doesn't exist yet, create one
                                 if (fragment == null) {
-                                    fTransaction.add(content.getId(), new EnterCouponFragment(), "tag2").commit();
+                                    fragment = new EnterCouponFragment();
+                                    fragTransaction.replace(content.getId(), fragment, "tag2").addToBackStack("tag2").commit();
                                 } else { // re-use the old fragment
-                                    fTransaction.replace(content.getId(), fragment, "tag2").commit();
+                                    fragTransaction.replace(content.getId(), fragment, "tag2").commit();
                                 }
                                 toolbar.setTitle(getResources().getString(R.string.app_name));
                             }
@@ -114,14 +116,17 @@ public class MainActivity extends AppCompatActivity {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                FragmentTransaction fTransaction = fragmentManager.beginTransaction();
+                                fragTransaction = getSupportFragmentManager().beginTransaction();
+                               // FragmentTransaction fTransaction = fragmentManager.beginTransaction();
                                 Fragment fragment = fragmentManager.findFragmentByTag("tag3");
                                 Log.e("frag3", fragment + "");
-                                // If fragment doesn't exist yet, create one
+                                // If fragment doesn't exist yet, create one                                    fragTransaction.replace(content.getId(), fragment, "tag3").commit();
+
                                 if (fragment == null) {
-                                    fTransaction.add(content.getId(), new AllProductFragment(), "tag3").commit();
+                                    fragment = new AllProductFragment();
+                                    fragTransaction.replace(content.getId(), fragment, "tag3").addToBackStack("tag3").commit();
                                 } else { // re-use the old fragment
-                                    fTransaction.replace(content.getId(), fragment, "tag3").commit();
+                                    fragTransaction.replace(content.getId(), fragment, "tag3").commit();
                                 }
                                 toolbar.setTitle(getResources().getString(R.string.app_name));
                             }
@@ -153,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
         };
 
         //Setting the actionbarToggle to drawer layout
-        drawerLayout.setDrawerListener(actionBarDrawerToggle);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
 
         //calling sync state is necessay or else your hamburger icon wont show up
         actionBarDrawerToggle.syncState();

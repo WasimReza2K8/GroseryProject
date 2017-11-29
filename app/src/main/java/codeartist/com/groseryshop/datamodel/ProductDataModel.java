@@ -7,6 +7,18 @@ package codeartist.com.groseryshop.datamodel;
 public class ProductDataModel {
     private String productName;
     private float price;
+    private Boolean isSelected = false;
+    private Boolean isCheckable = true;
+
+    public Boolean getCheckable() {
+        return isCheckable;
+    }
+
+    public void setCheckable(Boolean checkable) {
+        isCheckable = checkable;
+    }
+
+
 
     public String getProductName() {
         return productName;
@@ -33,4 +45,12 @@ public class ProductDataModel {
     }
 
     private int quantity;
+
+    public Boolean getSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(Boolean selected) {
+        isSelected = selected;
+    }
 }

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,10 +37,30 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.mTextViewProductName.setText(list.get(position).getProductName());
         holder.mTextViewPrice.setText(list.get(position).getPrice()+"");
+        if(list.get(position).getCheckable()){
+            holder.selection.setEnabled(true);
+        } else {
+            holder.selection.setEnabled(false);
+        }
+        if(list.get(position).getSelected()){
+            holder.selection.setChecked(true);
+        } else{
+            holder.selection.setChecked(false);
+        }
+        holder.selection.setTag(position);
+        holder.selection.setOnCheckedChangeListener(onCheckedChangeListener);
+
     }
+
+    private CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+            list.get((Integer) compoundButton.getTag()).setSelected(b);
+        }
+    };
 
     @Override
     public int getItemCount() {
