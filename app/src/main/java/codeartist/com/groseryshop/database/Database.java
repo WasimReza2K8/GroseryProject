@@ -83,7 +83,7 @@ public class Database extends SQLiteOpenHelper {
 
         db.execSQL("CREATE TABLE IF NOT EXISTS " + PRODUCT_TABLE + " ("
                 + PRODUCT_NAME + " TEXT primary key, "
-                + PRODUCT_PRICE + " TEXT NOT NULL, "
+                + PRODUCT_PRICE + " REAL NOT NULL, "
                 + PRODUCT_QUANTITY + " INTEGER DEFAULT 1);");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS " + COUPON_RATE_TABLE + " ("
