@@ -1,6 +1,7 @@
 package codeartist.com.groseryshop.database;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -10,8 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import codeartist.com.groseryshop.datamodel.CouponDiscountDataModel;
-import codeartist.com.groseryshop.datamodel.CouponItemDataModel;
+import codeartist.com.groseryshop.datamodel.CouponDataModel;
 import codeartist.com.groseryshop.datamodel.ProductDataModel;
 
 /**
@@ -46,6 +46,9 @@ public class Database extends SQLiteOpenHelper {
     private static String[] sCouponItemColumns = new String[]{
             COLUMN_COUPON_ITEM_ID,
             COLUMN_COUPON_NUMBER,
+            COLUMN_COUPON_ITEM
+    };
+    private static String[] sOnlyCouponItem = new String[]{
             COLUMN_COUPON_ITEM
     };
 
@@ -112,14 +115,14 @@ public class Database extends SQLiteOpenHelper {
         return getDatabase().insert(PRODUCT_TABLE, null, cv);
     }
 
-    public static synchronized long insertCouponRateData(CouponDiscountDataModel model) {
+    public static synchronized long insertCouponRateData(CouponDataModel model) {
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_COUPON_ID, model.getCouponNumber());
         cv.put(COLUMN_COUPON_DISCOUNT, model.getDiscount());
         return getDatabase().insert(COUPON_RATE_TABLE, null, cv);
     }
 
-    public static synchronized long insertCouponItemData(CouponItemDataModel model) {
+    public static synchronized long insertCouponItemData(CouponDataModel model) {
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_COUPON_NUMBER, model.getCouponNmber());
         cv.put(COLUMN_COUPON_ITEM, model.getItem());
@@ -164,6 +167,25 @@ public class Database extends SQLiteOpenHelper {
         // TODO Auto-generated method stub
         //String[] columns =
         return getDatabase().query(tableName, sCouponItemColumns, null, null, null, null, null);
+    }
+
+    public static synchronized Cursor getOnlyCouponItem(String tableName, int couponNumber) {
+        // TODO Auto-generated method stub
+        //String[] columns =
+        return getDatabase().query(tableName, sOnlyCouponItem, COLUMN_COUPON_NUMBER + "=" + couponNumber, null, null, null, null);
+    }
+    public static synchronized Cursor getCouponRate(String tableName) {
+        // TODO Auto-generated method stub
+        //String[] columns =
+        return getDatabase().query(tableName, sCouponRateColumns, null, null, null, null, null);
+    }
+
+    public static int deleteCoupon(int id) {
+        return getDatabase().delete(COUPON_RATE_TABLE, COLUMN_COUPON_ID + "=" + id, null);
+    }
+
+    public static int deleteCouponItem(int id) {
+        return getDatabase().delete(COUPON_ITEM_TABLE, COLUMN_COUPON_NUMBER + "=" + id, null);
     }
 
     public static synchronized boolean isValidCouponNumber(int number){
@@ -219,6 +241,38 @@ public class Database extends SQLiteOpenHelper {
         return list;
     }
 
+    public static synchronized ArrayList<CouponDataModel> getAllCoupon() {
+        ArrayList<CouponDataModel> list = new ArrayList<>();
+
+        Cursor c = Database.getCouponRate(COUPON_RATE_TABLE);
+        if (c.moveToFirst()) {
+
+            do {
+                CouponDataModel model = new CouponDataModel();
+                model.setCouponNumber(Integer.parseInt(c.getString(0)));
+                model.setDiscount(Integer.parseInt(c.getString(1)));
+                list.add(model);
+
+            } while (c.moveToNext());
+        }
+        c.close();
+        return list;
+    }
+
+    public static synchronized CouponDataModel getOneCouponItem(int couponNumber, CouponDataModel model) {
+        ArrayList<String> items = new ArrayList<>();
+        Cursor c = Database.getOnlyCouponItem(COUPON_ITEM_TABLE, couponNumber);
+        if (c.moveToFirst()) {
+
+            do {
+                items.add(c.getString(0));
+
+            } while (c.moveToNext());
+        }
+        model.setItemList(items);
+        c.close();
+        return model;
+    }
 
 
 

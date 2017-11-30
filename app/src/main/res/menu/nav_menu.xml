@@ -18,6 +18,10 @@
             android:id="@+id/all_product"
             android:checked="false"
             android:title="All Product" />
+        <item
+            android:id="@+id/all_coupon"
+            android:checked="false"
+            android:title="All coupon" />
 
     </group>
 

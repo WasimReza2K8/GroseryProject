@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import codeartist.com.groseryshop.fragments.AllCouponFragment;
 import codeartist.com.groseryshop.fragments.AllProductFragment;
 import codeartist.com.groseryshop.fragments.EnterCouponFragment;
 import codeartist.com.groseryshop.fragments.EnterProductFragment;
@@ -133,6 +134,29 @@ public class MainActivity extends AppCompatActivity {
                         }, timeDelay);
 
                         return true;
+
+                    case R.id.all_coupon:
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                fragTransaction = getSupportFragmentManager().beginTransaction();
+                                // FragmentTransaction fTransaction = fragmentManager.beginTransaction();
+                                Fragment fragment = fragmentManager.findFragmentByTag("tag4");
+                                Log.e("frag3", fragment + "");
+                                // If fragment doesn't exist yet, create one                                    fragTransaction.replace(content.getId(), fragment, "tag3").commit();
+
+                                if (fragment == null) {
+                                    fragment = new AllCouponFragment();
+                                    fragTransaction.replace(content.getId(), fragment, "tag4").addToBackStack("tag4").commit();
+                                } else { // re-use the old fragment
+                                    fragTransaction.replace(content.getId(), fragment, "tag4").commit();
+                                }
+                                toolbar.setTitle(getResources().getString(R.string.app_name));
+                            }
+                        }, timeDelay);
+
+                        return true;
+
                     default:
                         Toast.makeText(getApplicationContext(), "Somethings Wrong", Toast.LENGTH_SHORT).show();
                         return true;

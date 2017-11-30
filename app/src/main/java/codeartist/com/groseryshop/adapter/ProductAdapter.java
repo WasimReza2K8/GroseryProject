@@ -66,10 +66,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     public int getItemCount() {
         return list.size();
     }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
-        public TextView mTextViewProductName, mTextViewPrice,
-                mTextViewVenue;
+        public TextView mTextViewProductName, mTextViewPrice;
         public CheckBox selection;
 
         public ViewHolder(View v) {

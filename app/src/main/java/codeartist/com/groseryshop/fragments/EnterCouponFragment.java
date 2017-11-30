@@ -22,8 +22,7 @@ import android.widget.Toast;
 import codeartist.com.groseryshop.R;
 import codeartist.com.groseryshop.adapter.ProductAdapter;
 import codeartist.com.groseryshop.database.Database;
-import codeartist.com.groseryshop.datamodel.CouponDiscountDataModel;
-import codeartist.com.groseryshop.datamodel.CouponItemDataModel;
+import codeartist.com.groseryshop.datamodel.CouponDataModel;
 import codeartist.com.groseryshop.datamodel.ProductDataModel;
 
 /**
@@ -75,7 +74,7 @@ public class EnterCouponFragment extends Fragment {
                     return;
                 }
 
-                CouponDiscountDataModel couponDiscountDataModel = new CouponDiscountDataModel();
+                CouponDataModel couponDiscountDataModel = new CouponDataModel();
                 String segments[] = couponTextView.getText().toString().split(":");
                 String couponNumber = segments[1].trim();
                 couponDiscountDataModel.setCouponNumber(Integer.parseInt(couponNumber));
@@ -84,7 +83,7 @@ public class EnterCouponFragment extends Fragment {
                 Database.insertCouponRateData(couponDiscountDataModel);
 
                 for (String product : discountProduct) {
-                    CouponItemDataModel item = new CouponItemDataModel();
+                    CouponDataModel item = new CouponDataModel();
                     item.setCouponNmber(Integer.parseInt(couponNumber));
                     item.setItem(product);
                     long k = Database.insertCouponItemData(item);
