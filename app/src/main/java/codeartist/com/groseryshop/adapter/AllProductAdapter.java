@@ -1,0 +1,118 @@
+package codeartist.com.groseryshop.adapter;
+
+import android.content.Context;
+import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import codeartist.com.groseryshop.R;
+import codeartist.com.groseryshop.datamodel.ProductDataModel;
+
+/**
+ * Created by bjit-16 on 11/30/17.
+ */
+
+public class AllProductAdapter extends RecyclerView.Adapter<AllProductAdapter.ViewHolder> {
+    private List<ProductDataModel> list = new ArrayList<>();
+    private Context mContext;
+    private List<Integer> changeItemPosition;
+    private CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+            list.get((Integer) compoundButton.getTag()).setSelected(b);
+            notifyDataSetChanged();
+        }
+    };
+
+
+    public AllProductAdapter(Context context, List<ProductDataModel> list, List<Integer> changeItemPosition) {
+        this.list = list;
+        this.mContext = context;
+        this.changeItemPosition = changeItemPosition;
+    }
+    @Override
+    public AllProductAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_all_product, null);
+        AllProductAdapter.ViewHolder viewHolder = new AllProductAdapter.ViewHolder(view);
+        return viewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(AllProductAdapter.ViewHolder holder, final int position) {
+        holder.mTextViewProductName.setText(list.get(position).getProductName());
+        holder.mEditTextPrice.setText(list.get(position).getPrice()+"");
+        if( list.get(position).getSelected()){
+            holder.mEditTextPrice.setInputType(InputType.TYPE_CLASS_NUMBER);
+            holder.mEditTextPrice.setFocusable(true);
+            holder.mEditTextPrice.setFocusableInTouchMode(true); // user touches widget on phone with touch screen
+            holder.mEditTextPrice.setClickable(true);
+            holder.selection.setChecked(true);
+        } else{
+            holder.mEditTextPrice.setInputType(InputType.TYPE_NULL);
+            holder.mEditTextPrice.setFocusable(false);
+            holder.mEditTextPrice.setFocusableInTouchMode(false); // user touches widget on phone with touch screen
+            holder.mEditTextPrice.setClickable(false);
+            holder.selection.setChecked(false);
+           /// holder.mEditTextPrice.setEd(false);
+        }
+        holder.selection.setTag(position);
+        holder.mEditTextPrice.setTag(position);
+        holder.mEditTextPrice.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                //changeItemPosition.add(position);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String item = editable.toString();
+                if(item != null && !item.isEmpty()){
+                    list.get(position).setPrice(Float.parseFloat(item));
+                }
+
+            }
+        });
+
+
+    }
+
+
+
+    @Override
+    public int getItemCount() {
+        return list.size();
+    }
+
+    public  class ViewHolder extends RecyclerView.ViewHolder {
+        // each data item is just a string in this case
+        public TextView mTextViewProductName, mTextViewPrice;
+        public EditText mEditTextPrice;
+        public CheckBox selection;
+
+        public ViewHolder(View v) {
+            super(v);
+            mTextViewProductName =  v.findViewById(R.id.name);
+            mEditTextPrice =  v.findViewById(R.id.price);
+            selection = v.findViewById(R.id.selectItem);
+            selection.setOnCheckedChangeListener(onCheckedChangeListener);
+
+
+        }
+    }
+}

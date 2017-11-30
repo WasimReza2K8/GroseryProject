@@ -274,6 +274,15 @@ public class Database extends SQLiteOpenHelper {
         return model;
     }
 
+    public static synchronized long updateProductPrice(ProductDataModel model){
+        ContentValues cv = new ContentValues();
+        cv.put(PRODUCT_PRICE, model.getPrice());
+        String strSQL = "UPDATE "+ PRODUCT_TABLE + " SET "+PRODUCT_PRICE +" = "+ model.getPrice()+" WHERE "+PRODUCT_NAME+" = '"+ model.getProductName()+"'";
+        getDatabase().execSQL(strSQL);
+        return 1;
+        //return getDatabase().update(PRODUCT_TABLE, cv, PRODUCT_NAME+" = "+model.getProductName(), null);
+    }
+
 
 
 }
