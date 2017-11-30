@@ -88,7 +88,7 @@ public class Database extends SQLiteOpenHelper {
 
         db.execSQL("CREATE TABLE IF NOT EXISTS " + COUPON_RATE_TABLE + " ("
                 + COLUMN_COUPON_ID + " INTEGER primary key, "
-                + COLUMN_COUPON_DISCOUNT + " INTEGER NOT NULL);");
+                + COLUMN_COUPON_DISCOUNT + " REAL NOT NULL);");
         String qu = "CREATE TABLE IF NOT EXISTS " + COUPON_ITEM_TABLE + " ("
                 + COLUMN_COUPON_ITEM_ID + " INTEGER primary key autoincrement, "
                 + COLUMN_COUPON_NUMBER + " INTEGER, "
@@ -250,7 +250,7 @@ public class Database extends SQLiteOpenHelper {
             do {
                 CouponDataModel model = new CouponDataModel();
                 model.setCouponNumber(Integer.parseInt(c.getString(0)));
-                model.setDiscount(Integer.parseInt(c.getString(1)));
+                model.setDiscount(Float.parseFloat(c.getString(1)));
                 list.add(model);
 
             } while (c.moveToNext());

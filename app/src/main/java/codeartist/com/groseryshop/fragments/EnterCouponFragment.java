@@ -79,7 +79,7 @@ public class EnterCouponFragment extends Fragment {
                 String couponNumber = segments[1].trim();
                 couponDiscountDataModel.setCouponNumber(Integer.parseInt(couponNumber));
                 couponDiscountDataModel
-                        .setDiscount(Integer.parseInt(discountEditText.getText().toString()));
+                        .setDiscount(Float.parseFloat(discountEditText.getText().toString()));
                 Database.insertCouponRateData(couponDiscountDataModel);
 
                 for (String product : discountProduct) {

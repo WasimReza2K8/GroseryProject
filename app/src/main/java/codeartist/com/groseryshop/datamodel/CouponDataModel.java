@@ -7,7 +7,7 @@ import java.util.ArrayList;
  */
 
 public class CouponDataModel {
-    private int discount;
+    private float discount;
     private int id;
     private int couponNumber;
     private String item;
@@ -66,11 +66,11 @@ public class CouponDataModel {
         this.couponNumber = couponNumber;
     }
 
-    public int getDiscount() {
+    public float getDiscount() {
         return discount;
     }
 
-    public void setDiscount(int discount) {
+    public void setDiscount(float discount) {
         this.discount = discount;
     }
 }
