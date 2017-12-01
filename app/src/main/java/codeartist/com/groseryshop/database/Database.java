@@ -283,6 +283,18 @@ public class Database extends SQLiteOpenHelper {
         //return getDatabase().update(PRODUCT_TABLE, cv, PRODUCT_NAME+" = "+model.getProductName(), null);
     }
 
+    public static synchronized ArrayList<CouponDataModel> shoppingList(Float budget){
+        String getPriceSum = "SELECT SUM(" + PRODUCT_PRICE +") FROM " + PRODUCT_TABLE + " INNER JOIN "
+                + COUPON_ITEM_TABLE +" ON " + PRODUCT_TABLE + "." +PRODUCT_NAME + " = " + COUPON_ITEM_TABLE +"."
+                + COLUMN_COUPON_ITEM + " GROUP BY " + COLUMN_COUPON_ITEM + "." + COLUMN_COUPON_NUMBER;
+
+        String getShoppingList = "SELECT ("+ getPriceSum + " - "+ COUPON_RATE_TABLE + "."
+                + COLUMN_COUPON_DISCOUNT + ") AS finalRate, " + COLUMN_COUPON_DISCOUNT +", "
+                + COLUMN_COUPON_ID+ " FROM " + COUPON_RATE_TABLE;
+
+        return null;
+    }
+
 
 
 }
