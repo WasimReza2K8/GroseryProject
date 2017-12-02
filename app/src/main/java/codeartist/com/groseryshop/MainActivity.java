@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         fragTransaction = getSupportFragmentManager().beginTransaction();
         EnterProductFragment base = new EnterProductFragment();
         toolbar.setTitle(getResources().getString(R.string.app_name));
-        fragTransaction.add(content.getId(), base, "uniqueTag").addToBackStack("uniqueTag");
+        fragTransaction.add(content.getId(), base, "uniqueTag");
         fragTransaction.commit();
         setSupportActionBar(toolbar);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                                 // If fragment doesn't exist yet, create one
                                 if (fragment == null) {
                                     fragment = new EnterCouponFragment();
-                                    fragTransaction.replace(content.getId(), fragment, "tag2").addToBackStack("tag2").commit();
+                                    fragTransaction.replace(content.getId(), fragment, "tag2").commit();
                                 } else { // re-use the old fragment
                                     fragTransaction.replace(content.getId(), fragment, "tag2").commit();
                                 }
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 if (fragment == null) {
                                     fragment = new AllProductFragment();
-                                    fragTransaction.replace(content.getId(), fragment, "tag3").addToBackStack("tag3").commit();
+                                    fragTransaction.replace(content.getId(), fragment, "tag3").commit();
                                 } else { // re-use the old fragment
                                     fragTransaction.replace(content.getId(), fragment, "tag3").commit();
                                 }
@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 if (fragment == null) {
                                     fragment = new AllCouponFragment();
-                                    fragTransaction.replace(content.getId(), fragment, "tag4").addToBackStack("tag4").commit();
+                                    fragTransaction.replace(content.getId(), fragment, "tag4").commit();
                                 } else { // re-use the old fragment
                                     fragTransaction.replace(content.getId(), fragment, "tag4").commit();
                                 }
@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 if (fragment == null) {
                                     fragment = new FinalPriceFragment();
-                                    fragTransaction.replace(content.getId(), fragment, "tag5").addToBackStack("tag5").commit();
+                                    fragTransaction.replace(content.getId(), fragment, "tag5").commit();
                                 } else { // re-use the old fragment
                                     fragTransaction.replace(content.getId(), fragment, "tag5").commit();
                                 }
