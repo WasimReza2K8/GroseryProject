@@ -40,11 +40,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.mTextViewProductName.setText(list.get(position).getProductName());
         holder.mTextViewPrice.setText(list.get(position).getPrice()+"");
-        if(list.get(position).getCheckable()){
-            holder.selection.setEnabled(true);
-        } else {
-            holder.selection.setEnabled(false);
-        }
+       
         if(list.get(position).getSelected()){
             holder.selection.setChecked(true);
         } else{

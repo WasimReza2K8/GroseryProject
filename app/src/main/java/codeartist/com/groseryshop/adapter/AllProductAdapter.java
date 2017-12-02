@@ -27,11 +27,18 @@ public class AllProductAdapter extends RecyclerView.Adapter<AllProductAdapter.Vi
     private List<ProductDataModel> list = new ArrayList<>();
     private Context mContext;
     private List<Integer> changeItemPosition;
-    private CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
+
+    private View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
-        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-            list.get((Integer) compoundButton.getTag()).setSelected(b);
-            notifyDataSetChanged();
+        public void onClick(View view) {
+            int position = (Integer) view.getTag();
+            if(((CheckBox)view).isChecked()){
+                list.get((Integer) view.getTag()).setSelected(true);
+            } else{
+                list.get((Integer) view.getTag()).setSelected(false);
+            }
+
+            notifyItemChanged(position);
         }
     };
 
@@ -76,15 +83,15 @@ public class AllProductAdapter extends RecyclerView.Adapter<AllProductAdapter.Vi
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                //changeItemPosition.add(position);
+                changeItemPosition.add(position);
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-                String item = editable.toString();
+                /*String item = editable.toString();
                 if(item != null && !item.isEmpty()){
                     list.get(position).setPrice(Float.parseFloat(item));
-                }
+                }*/
 
             }
         });
@@ -110,7 +117,8 @@ public class AllProductAdapter extends RecyclerView.Adapter<AllProductAdapter.Vi
             mTextViewProductName =  v.findViewById(R.id.name);
             mEditTextPrice =  v.findViewById(R.id.price);
             selection = v.findViewById(R.id.selectItem);
-            selection.setOnCheckedChangeListener(onCheckedChangeListener);
+           // selection.setOnCheckedChangeListener(onCheckedChangeListener);
+            selection.setOnClickListener(clickListener);
 
 
         }

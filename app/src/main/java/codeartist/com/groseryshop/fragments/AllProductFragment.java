@@ -41,16 +41,27 @@ public class AllProductFragment extends Fragment {
         list= Database.getAllProduct();
         mAdapter = new AllProductAdapter(getActivity(), list, changeItemPosition);
         mRecyclerView.setAdapter(mAdapter);
+
+
         updateItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                for (ProductDataModel item : list) {
-                    if (item.getSelected()) {
-                        Database.updateProductPrice(item);
+                for(Integer position: changeItemPosition){
+                    AllProductAdapter.ViewHolder holder = (AllProductAdapter.ViewHolder)
+                            mRecyclerView.findViewHolderForAdapterPosition(position);
+                    if(holder.mEditTextPrice != null){
+                        String price = holder.mEditTextPrice.getText().toString();
+                        if(price  != null  && !price.isEmpty()){
+                            list.get(position).setPrice(Float.parseFloat(price));
+                            Database.updateProductPrice(list.get(position));
+                            //changeItemPosition.remove(position);
+                        }
                     }
+
                 }
 
-             //   resetAllCheckedItem();
+                resetAllCheckedItem();
+                changeItemPosition.clear();
                // mAdapter.notifyDataSetChanged();
             }
         });
@@ -60,7 +71,7 @@ public class AllProductFragment extends Fragment {
     private void resetAllCheckedItem() {
         for (ProductDataModel model : list) {
             model.setSelected(false);
-            mAdapter.notifyDataSetChanged();
         }
+        mAdapter.notifyDataSetChanged();
     }
 }
