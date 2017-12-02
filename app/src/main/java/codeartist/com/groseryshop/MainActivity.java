@@ -20,6 +20,7 @@ import codeartist.com.groseryshop.fragments.AllCouponFragment;
 import codeartist.com.groseryshop.fragments.AllProductFragment;
 import codeartist.com.groseryshop.fragments.EnterCouponFragment;
 import codeartist.com.groseryshop.fragments.EnterProductFragment;
+import codeartist.com.groseryshop.fragments.FinalPriceFragment;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         fragTransaction = getSupportFragmentManager().beginTransaction();
         EnterProductFragment base = new EnterProductFragment();
         toolbar.setTitle(getResources().getString(R.string.app_name));
-        fragTransaction.add(content.getId(), base, "uniqueTag").addToBackStack("uniqueTag");
+        fragTransaction.add(content.getId(), base, "uniqueTag");
         fragTransaction.commit();
         setSupportActionBar(toolbar);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -103,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                                 // If fragment doesn't exist yet, create one
                                 if (fragment == null) {
                                     fragment = new EnterCouponFragment();
-                                    fragTransaction.replace(content.getId(), fragment, "tag2").addToBackStack("tag2").commit();
+                                    fragTransaction.replace(content.getId(), fragment, "tag2").commit();
                                 } else { // re-use the old fragment
                                     fragTransaction.replace(content.getId(), fragment, "tag2").commit();
                                 }
@@ -125,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 if (fragment == null) {
                                     fragment = new AllProductFragment();
-                                    fragTransaction.replace(content.getId(), fragment, "tag3").addToBackStack("tag3").commit();
+                                    fragTransaction.replace(content.getId(), fragment, "tag3").commit();
                                 } else { // re-use the old fragment
                                     fragTransaction.replace(content.getId(), fragment, "tag3").commit();
                                 }
@@ -147,9 +148,31 @@ public class MainActivity extends AppCompatActivity {
 
                                 if (fragment == null) {
                                     fragment = new AllCouponFragment();
-                                    fragTransaction.replace(content.getId(), fragment, "tag4").addToBackStack("tag4").commit();
+                                    fragTransaction.replace(content.getId(), fragment, "tag4").commit();
                                 } else { // re-use the old fragment
                                     fragTransaction.replace(content.getId(), fragment, "tag4").commit();
+                                }
+                                toolbar.setTitle(getResources().getString(R.string.app_name));
+                            }
+                        }, timeDelay);
+
+                        return true;
+
+                    case R.id.final_price:
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                fragTransaction = getSupportFragmentManager().beginTransaction();
+                                // FragmentTransaction fTransaction = fragmentManager.beginTransaction();
+                                Fragment fragment = fragmentManager.findFragmentByTag("tag5");
+                                Log.e("frag3", fragment + "");
+                                // If fragment doesn't exist yet, create one                                    fragTransaction.replace(content.getId(), fragment, "tag3").commit();
+
+                                if (fragment == null) {
+                                    fragment = new FinalPriceFragment();
+                                    fragTransaction.replace(content.getId(), fragment, "tag5").commit();
+                                } else { // re-use the old fragment
+                                    fragTransaction.replace(content.getId(), fragment, "tag5").commit();
                                 }
                                 toolbar.setTitle(getResources().getString(R.string.app_name));
                             }
