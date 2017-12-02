@@ -84,7 +84,7 @@ public class EnterCouponFragment extends Fragment {
 
                 for (String product : discountProduct) {
                     CouponDataModel item = new CouponDataModel();
-                    item.setCouponNmber(Integer.parseInt(couponNumber));
+                    item.setCouponNumber(Integer.parseInt(couponNumber));
                     item.setItem(product);
                     long k = Database.insertCouponItemData(item);
                     Log.e("insert item", k + "");

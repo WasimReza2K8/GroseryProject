@@ -21,7 +21,7 @@ public class CouponDataModel {
         this.itemList = itemList;
     }
 
-    private ArrayList<String> itemList;
+    private ArrayList<String> itemList = new ArrayList<>();
 
 
     public boolean isDeletable() {
@@ -40,14 +40,6 @@ public class CouponDataModel {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getCouponNmber() {
-        return couponNumber;
-    }
-
-    public void setCouponNmber(int couponNmber) {
-        this.couponNumber = couponNmber;
     }
 
     public String getItem() {

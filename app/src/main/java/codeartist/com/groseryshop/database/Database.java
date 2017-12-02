@@ -1,8 +1,5 @@
 package codeartist.com.groseryshop.database;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -11,7 +8,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import codeartist.com.groseryshop.datamodel.CouponDataModel;
+import codeartist.com.groseryshop.datamodel.FinalPriceModel;
 import codeartist.com.groseryshop.datamodel.ProductDataModel;
 
 /**
@@ -50,6 +52,9 @@ public class Database extends SQLiteOpenHelper {
     };
     private static String[] sOnlyCouponItem = new String[]{
             COLUMN_COUPON_ITEM
+    };
+    private static String[] sOnlyCouponNumber = new String[]{
+            COLUMN_COUPON_NUMBER
     };
 
 
@@ -93,11 +98,11 @@ public class Database extends SQLiteOpenHelper {
                 + COLUMN_COUPON_ITEM_ID + " INTEGER primary key autoincrement, "
                 + COLUMN_COUPON_NUMBER + " INTEGER, "
                 + COLUMN_COUPON_ITEM + " TEXT NOT NULL,"
-                + " FOREIGN KEY ("+COLUMN_COUPON_NUMBER+") REFERENCES "+COUPON_RATE_TABLE+" ("+COLUMN_COUPON_ID+"));";
+                + " FOREIGN KEY (" + COLUMN_COUPON_NUMBER + ") REFERENCES " + COUPON_RATE_TABLE + " (" + COLUMN_COUPON_ID + "));";
 
 
         db.execSQL(qu);
-        Log.e("coupon_item_query",qu);
+        Log.e("coupon_item_query", qu);
 
 
     }
@@ -124,18 +129,15 @@ public class Database extends SQLiteOpenHelper {
 
     public static synchronized long insertCouponItemData(CouponDataModel model) {
         ContentValues cv = new ContentValues();
-        cv.put(COLUMN_COUPON_NUMBER, model.getCouponNmber());
+        cv.put(COLUMN_COUPON_NUMBER, model.getCouponNumber());
         cv.put(COLUMN_COUPON_ITEM, model.getItem());
         return getDatabase().insertOrThrow(COUPON_ITEM_TABLE, null, cv);
     }
 
 
-
     public static synchronized int deleteAll(String tableName) {
         return getDatabase().delete(tableName, "1", null);
     }
-
-
 
 
     public static synchronized ProductDataModel getData(String productName) {
@@ -174,6 +176,14 @@ public class Database extends SQLiteOpenHelper {
         //String[] columns =
         return getDatabase().query(tableName, sOnlyCouponItem, COLUMN_COUPON_NUMBER + "=" + couponNumber, null, null, null, null);
     }
+
+    public static synchronized Cursor getCouponNumberByItem(String tableName, String itemName) {
+        // TODO Auto-generated method stub
+        //String[] columns =
+        return getDatabase().query(tableName, sOnlyCouponNumber, COLUMN_COUPON_ITEM + " = '" + itemName + "'"
+                , null, null, null, null);
+    }
+
     public static synchronized Cursor getCouponRate(String tableName) {
         // TODO Auto-generated method stub
         //String[] columns =
@@ -188,7 +198,7 @@ public class Database extends SQLiteOpenHelper {
         return getDatabase().delete(COUPON_ITEM_TABLE, COLUMN_COUPON_NUMBER + "=" + id, null);
     }
 
-    public static synchronized boolean isValidCouponNumber(int number){
+    public static synchronized boolean isValidCouponNumber(int number) {
         Cursor c = null;
         try {
 
@@ -198,9 +208,9 @@ public class Database extends SQLiteOpenHelper {
             } else {
                 return false;
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             c.close();
         }
         return false;
@@ -274,27 +284,98 @@ public class Database extends SQLiteOpenHelper {
         return model;
     }
 
-    public static synchronized long updateProductPrice(ProductDataModel model){
+    public static synchronized long updateProductPrice(ProductDataModel model) {
         ContentValues cv = new ContentValues();
         cv.put(PRODUCT_PRICE, model.getPrice());
-        String strSQL = "UPDATE "+ PRODUCT_TABLE + " SET "+PRODUCT_PRICE +" = "+ model.getPrice()+" WHERE "+PRODUCT_NAME+" = '"+ model.getProductName()+"'";
+        String strSQL = "UPDATE " + PRODUCT_TABLE + " SET " + PRODUCT_PRICE + " = " + model.getPrice() + " WHERE " + PRODUCT_NAME + " = '" + model.getProductName() + "'";
         getDatabase().execSQL(strSQL);
         return 1;
         //return getDatabase().update(PRODUCT_TABLE, cv, PRODUCT_NAME+" = "+model.getProductName(), null);
     }
 
-    public static synchronized ArrayList<CouponDataModel> shoppingList(Float budget){
-        String getPriceSum = "SELECT SUM(" + PRODUCT_PRICE +") FROM " + PRODUCT_TABLE + " INNER JOIN "
-                + COUPON_ITEM_TABLE +" ON " + PRODUCT_TABLE + "." +PRODUCT_NAME + " = " + COUPON_ITEM_TABLE +"."
+    public static synchronized ArrayList<CouponDataModel> shoppingList(Float budget) {
+        String getPriceSum = "SELECT SUM(" + PRODUCT_PRICE + ") FROM " + PRODUCT_TABLE + " INNER JOIN "
+                + COUPON_ITEM_TABLE + " ON " + PRODUCT_TABLE + "." + PRODUCT_NAME + " = " + COUPON_ITEM_TABLE + "."
                 + COLUMN_COUPON_ITEM + " GROUP BY " + COLUMN_COUPON_ITEM + "." + COLUMN_COUPON_NUMBER;
 
-        String getShoppingList = "SELECT ("+ getPriceSum + " - "+ COUPON_RATE_TABLE + "."
-                + COLUMN_COUPON_DISCOUNT + ") AS finalRate, " + COLUMN_COUPON_DISCOUNT +", "
-                + COLUMN_COUPON_ID+ " FROM " + COUPON_RATE_TABLE;
+        String getShoppingList = "SELECT (" + getPriceSum + " - " + COUPON_RATE_TABLE + "."
+                + COLUMN_COUPON_DISCOUNT + ") AS finalRate, " + COLUMN_COUPON_DISCOUNT + ", "
+                + COLUMN_COUPON_ID + " FROM " + COUPON_RATE_TABLE;
 
         return null;
     }
 
+
+    public static synchronized ArrayList<Float> getFinalPrice(FinalPriceModel selectedItems) {
+        ArrayList<CouponDataModel> list = new ArrayList<>();
+
+        String lastItem = selectedItems.getSelectedItems()
+                .get(selectedItems.getSelectedItems().size() - 1);
+        String couponSelection = "SELECT " + COLUMN_COUPON_NUMBER + " FROM "
+                + COUPON_ITEM_TABLE + " WHERE " + COLUMN_COUPON_ITEM + " = '"
+                + lastItem + "'";
+        Cursor cursor = getCouponNumberByItem(COUPON_ITEM_TABLE, lastItem);
+        if (cursor.moveToFirst()) {
+
+            do {
+                CouponDataModel model = new CouponDataModel();
+                int couponNumber = Integer.parseInt(cursor.getString(0));
+                model.setCouponNumber(couponNumber);
+                Cursor mCursor = getDatabase().query(COUPON_ITEM_TABLE, sOnlyCouponItem, COLUMN_COUPON_NUMBER + " = " + couponNumber
+                        , null, null, null, null);
+                if (mCursor.moveToFirst()) {
+
+                    do {
+                        String pro = mCursor.getString(0);
+                        model.getItemList().add(mCursor.getString(0));
+                        Log.e("couponnumber", couponNumber + ": " + pro + " " + lastItem);
+                    } while (mCursor.moveToNext());
+                }
+                mCursor.close();
+                list.add(model);
+            } while (cursor.moveToNext());
+        }
+        Log.e("couponnumber", " " + list.size());
+        cursor.close();
+
+        for (CouponDataModel model : list) {
+            Cursor mCursor = getDatabase().query(COUPON_RATE_TABLE, new String[]{COLUMN_COUPON_DISCOUNT}, COLUMN_COUPON_ID + " = " + model.getCouponNumber()
+                    , null, null, null, null);
+            if (mCursor.moveToFirst()) {
+                model.setDiscount(Float.parseFloat(mCursor.getString(0)));
+            }
+            mCursor.close();
+        }
+
+
+        for (CouponDataModel model : list) {
+            int itemNumber = model.getItemList().size();
+            int count = 0;
+            for (String item : selectedItems.getSelectedItems()) {
+                if (model.getItemList().contains(item)) {
+                    count++;
+                }
+                if (count == itemNumber) {
+                    selectedItems.getDiscount().add(model.getDiscount());
+                }
+            }
+
+        }
+
+        ArrayList<Float> finalPrice = new ArrayList<>();
+        Float total = 0f, afterDiscount, discount = 0f;
+        for (Float price : selectedItems.getPrice()) {
+            total = total + price;
+        }
+
+        for (Float reduce : selectedItems.getDiscount()) {
+            discount = reduce + discount;
+        }
+        afterDiscount = total - discount;
+        finalPrice.add(total);
+        finalPrice.add(afterDiscount);
+        return finalPrice;
+    }
 
 
 }
