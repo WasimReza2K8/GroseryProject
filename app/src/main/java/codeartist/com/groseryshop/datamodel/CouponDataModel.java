@@ -65,4 +65,5 @@ public class CouponDataModel {
     public void setDiscount(float discount) {
         this.discount = discount;
     }
+
 }
