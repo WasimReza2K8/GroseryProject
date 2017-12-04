@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,19 +39,19 @@ public class FinalPriceFragment extends Fragment {
     private TextView totalTextView, discountTextView;
     private EditText discountEditText;
     private List<ProductDataModel> list;
-    private FinalPriceModel selectedPriceCount = new FinalPriceModel();
+    private ArrayList<CouponDataModel> couponList;
+    private ArrayList<ProductDataModel> selectedItemList = new ArrayList<>();
+
 
     private CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
             int position = (Integer) compoundButton.getTag();
-            selectedPriceCount.getSelectedItems().add(list.get(position).getProductName());
-            selectedPriceCount.getPrice().add(list.get(position).getPrice());
-           /* selectedItems.put(list.get(position).getProductName(),
-                   list.get(position).getPrice()) ;*/
-            ArrayList<Float> prices = Database.getFinalPrice(selectedPriceCount);
-            totalTextView.setText("Total Price: " + prices.get(0));
-            discountTextView.setText("Price After Discount: " + prices.get(1));
+            if(b){
+                selectedItemList.add(list.get(position));
+            } else{
+                selectedItemList.remove(list.get(position));
+            }
 
         }
     };
@@ -70,6 +71,8 @@ public class FinalPriceFragment extends Fragment {
         list = Database.getAllProduct();
         mAdapter = new FinalPriceAdapter(getActivity(), list, onCheckedChangeListener);
         mRecyclerView.setAdapter(mAdapter);
+        couponList = Database.getAllCouponWithFullInfo();
+        //Log.e("CouponList", Database.getAllCouponWithFullInfo().size()+"");
         finalPrice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

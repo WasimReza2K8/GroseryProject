@@ -305,6 +305,34 @@ public class Database extends SQLiteOpenHelper {
         return null;
     }
 
+    public static synchronized ArrayList<CouponDataModel> getAllCouponWithFullInfo() {
+        ArrayList<CouponDataModel> couponList = new ArrayList<>();
+        CouponDataModel model = null;
+        Cursor cursor = getDatabase().rawQuery("SELECT "+ COUPON_RATE_TABLE + "."+ COLUMN_COUPON_ID
+                +", "+  COUPON_RATE_TABLE + "."+ COLUMN_COUPON_DISCOUNT  +", "+ COUPON_ITEM_TABLE + "."
+                + COLUMN_COUPON_ITEM + " FROM " + COUPON_RATE_TABLE + " JOIN " + COUPON_ITEM_TABLE + " ON "
+                + COUPON_RATE_TABLE+ "."+ COLUMN_COUPON_ID + " = " + COUPON_ITEM_TABLE + "."
+                + COLUMN_COUPON_NUMBER ,null);
+        if (cursor.moveToFirst()) {
+            do {
+                Log.e("coupon_result", " id: "+cursor.getString(0) + " discount: "+cursor.getString(1)
+                        + " item: "+ cursor.getString(2));
+                int id = Integer.parseInt(cursor.getString(0));
+                if(couponList.size() == 0 || (model != null && id != model.getCouponNumber())){
+                    model = new CouponDataModel();
+                    model.setCouponNumber(id);
+                    model.setDiscount(Float.parseFloat(cursor.getString(1)));
+                    model.getItemList().add(cursor.getString(2));
+                    couponList.add(model);
+                } else {
+                    model.getItemList().add(cursor.getString(2));
+                }
+
+            }while (cursor.moveToNext());
+        }
+        return couponList;
+    }
+
 
     public static synchronized ArrayList<Float> getFinalPrice(FinalPriceModel selectedItems) {
         ArrayList<CouponDataModel> list = new ArrayList<>();
