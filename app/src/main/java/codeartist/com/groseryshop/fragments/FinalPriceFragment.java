@@ -133,7 +133,7 @@ public class FinalPriceFragment extends Fragment {
 
         for(int i = 0; i < allCalculatableCoupon.size(); i++ ){
             for(int j = 0; j < allCalculatableCoupon.size(); j++){
-                if( i == j){
+                if( (i == j) || removable.contains(allCalculatableCoupon.get(j))|| removable.contains(allCalculatableCoupon.get(i))){
                     continue;
                 }
 
