@@ -13,6 +13,16 @@ public class CouponDataModel {
     private String item;
     private boolean isDeletable;
 
+    public ArrayList<ProductDataModel> getProductList() {
+        return productList;
+    }
+
+    public void setProductList(ArrayList<ProductDataModel> productList) {
+        this.productList = productList;
+    }
+
+    private ArrayList<ProductDataModel> productList = new ArrayList<>();
+
     public ArrayList<String> getItemList() {
         return itemList;
     }

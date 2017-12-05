@@ -10,6 +10,13 @@ public class ProductDataModel {
     private Boolean isSelected = false;
     private Boolean isCheckable = true;
 
+    public ProductDataModel(){}
+
+    public ProductDataModel(String name, float productPrice){
+        productName = name;
+        price = productPrice;
+    }
+
     public Boolean getCheckable() {
         return isCheckable;
     }
