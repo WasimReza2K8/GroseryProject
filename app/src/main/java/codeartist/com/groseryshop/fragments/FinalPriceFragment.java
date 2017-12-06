@@ -24,6 +24,7 @@ import codeartist.com.groseryshop.adapter.FinalPriceAdapter;
 import codeartist.com.groseryshop.database.Database;
 import codeartist.com.groseryshop.datamodel.CouponDataModel;
 import codeartist.com.groseryshop.datamodel.ProductDataModel;
+import codeartist.com.groseryshop.utils.Utils;
 
 /**
  * Created by ASUS on 02-Dec-17.
@@ -34,7 +35,6 @@ public class FinalPriceFragment extends Fragment {
     private FinalPriceAdapter mAdapter;
     private Button finalPrice;
     private TextView totalTextView, discountTextView;
-    private EditText discountEditText;
     private List<ProductDataModel> list;
     private ArrayList<CouponDataModel> couponList;
 
@@ -84,7 +84,7 @@ public class FinalPriceFragment extends Fragment {
                 while(true){
                     allCalculatableCoupon = new ArrayList<>(getElizible(selectedList));
                     ArrayList<ProductDataModel> removeList = new ArrayList<>();
-                    allCalculatableCoupon = getCouponList(allCalculatableCoupon);
+                    allCalculatableCoupon = Utils.getCouponWithoutConflicts(allCalculatableCoupon);
                     if((allCalculatableCoupon.size()  <= 0) || selectedList.size() <= 0){break;}
                     finalCoupns.addAll(allCalculatableCoupon);
                     for(int i = 0; i < selectedList.size(); i++){
@@ -101,17 +101,6 @@ public class FinalPriceFragment extends Fragment {
                     selectedList.removeAll(removeList);
                 }
 
-               /* for(CouponDataModel model : allCalculatableCoupon){
-                    if(!model.isDeletable()){
-                        for(String items : model.getItemList()){
-                            for(int i = 0; i < mainSelectedItemList.size(); i++){
-                                if(items.contains(mainSelectedItemList.get(i).getProductName())){
-                                    mainSelectedItemList.remove(i);
-                                }
-                            }
-                        }
-                    }
-                }*/
 
                 for(CouponDataModel model: finalCoupns){
                         discount = discount + model.getDiscount();
@@ -127,57 +116,6 @@ public class FinalPriceFragment extends Fragment {
         return rootView;
     }
 
-    private ArrayList<CouponDataModel> getCouponList( ArrayList<CouponDataModel> allCalculatableCoupon){
-        //ArrayList<CouponDataModel> allCalculatableCoupon = new ArrayList<>(selectedCoupon);
-        ArrayList<CouponDataModel> removable = new ArrayList<>();
-
-        for(int i = 0; i < allCalculatableCoupon.size(); i++ ){
-            for(int j = 0; j < allCalculatableCoupon.size(); j++){
-                if( (i == j) || removable.contains(allCalculatableCoupon.get(j))
-                        || removable.contains(allCalculatableCoupon.get(i))){
-                    continue;
-                }
-
-             for(int k = 0; k < allCalculatableCoupon.get(j).getItemList().size(); k++){
-                 if(allCalculatableCoupon.get(i).getItemList()
-                         .contains(allCalculatableCoupon.get(j).getItemList().get(k))){
-                     if(allCalculatableCoupon.get(i).getDiscount()
-                             >= allCalculatableCoupon.get(j).getDiscount()){
-                         removable.add(allCalculatableCoupon.get(j));
-
-                     } else{
-                         removable.add(allCalculatableCoupon.get(i));
-                     }
-                 }
-             }
-
-
-             /*   for(int k = 0; k < allCalculatableCoupon.get(i).getItemList().size(); k++){
-                    String item =  allCalculatableCoupon.get(i).getItemList().get(k);
-                    for(int n = 0; n < allCalculatableCoupon.get(j).getItemList().size(); n++){
-                        String matchItem =  allCalculatableCoupon.get(j).getItemList().get(n);
-                        if(item.equals(matchItem)){
-                            if(allCalculatableCoupon.get(i).getDiscount()
-                                    >= allCalculatableCoupon.get(j).getDiscount()){
-                                removable.add(allCalculatableCoupon.get(j));
-                                break;
-
-                            } else{
-                                removable.add(allCalculatableCoupon.get(i));
-                                break;
-                            }
-                        }
-                    }
-
-                }*/
-            }
-
-        }
-        allCalculatableCoupon.removeAll(removable);
-
-        return allCalculatableCoupon;
-
-    }
 
     private HashSet<CouponDataModel> getElizible(ArrayList<ProductDataModel> selectedList){
         HashSet<CouponDataModel> selectedCoupon = new HashSet<>();

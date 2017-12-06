@@ -23,6 +23,10 @@
             android:checked="false"
             android:title="All coupon" />
         <item
+            android:id="@+id/shopping_list"
+            android:checked="false"
+            android:title="Shopping List" />
+        <item
             android:id="@+id/final_price"
             android:checked="false"
             android:title="Final Price" />
