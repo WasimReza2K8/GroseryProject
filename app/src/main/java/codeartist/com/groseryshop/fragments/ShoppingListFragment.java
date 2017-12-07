@@ -1,6 +1,8 @@
 package codeartist.com.groseryshop.fragments;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import android.os.Bundle;
@@ -78,8 +80,17 @@ public class ShoppingListFragment extends Fragment {
         return rootView;
     }
 
+    class ListComparator implements Comparator<CouponDataModel> {
+        public int compare(CouponDataModel s1, CouponDataModel s2) {
+            return Float.compare(s2.getDiscount(), s1.getDiscount());
+        }
+    }
+
     private ArrayList<CouponDataModel> getCouponWithinBudget(ArrayList<CouponDataModel> list, float budget){
         ArrayList<CouponDataModel> removeableList = new ArrayList<>();
+
+        Collections.sort(list, new ListComparator());
+
         for(CouponDataModel model:list){
             float totalPrice = 0f;
             for(ProductDataModel product : model.getProductList()){
@@ -89,7 +100,10 @@ public class ShoppingListFragment extends Fragment {
             totalPrice = totalPrice - model.getDiscount();
             if(totalPrice > budget){
                 removeableList.add(model);
+            } else{
+                budget = budget - totalPrice;
             }
+
 
         }
 

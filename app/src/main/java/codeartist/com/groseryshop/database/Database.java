@@ -314,7 +314,8 @@ public class Database extends SQLiteOpenHelper {
                 + " JOIN " + COUPON_ITEM_TABLE + " ON "
                 + COUPON_RATE_TABLE+ "."+ COLUMN_COUPON_ID + " = " + COUPON_ITEM_TABLE + "."
                 + COLUMN_COUPON_NUMBER + " JOIN " + PRODUCT_TABLE + " ON " +  PRODUCT_TABLE+ "."
-                + PRODUCT_NAME + " = " +  COUPON_ITEM_TABLE + "." + COLUMN_COUPON_ITEM,null);
+                + PRODUCT_NAME + " = " +  COUPON_ITEM_TABLE + "." + COLUMN_COUPON_ITEM + " ORDER BY "
+                +  COUPON_RATE_TABLE + "."+ COLUMN_COUPON_DISCOUNT,null);
         if (cursor.moveToFirst()) {
             do {
                 Log.e("coupon_result", " id: "+cursor.getString(0) + " discount: "+cursor.getString(1)
