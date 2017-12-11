@@ -46,8 +46,10 @@ public class FinalPriceFragment extends Fragment {
         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
             int position = (Integer) compoundButton.getTag();
             if(b){
+                list.get(position).setSelected(true);
                 mainSelectedItemList.add(list.get(position));
             } else{
+                list.get(position).setSelected(false);
                 mainSelectedItemList.remove(list.get(position));
             }
 

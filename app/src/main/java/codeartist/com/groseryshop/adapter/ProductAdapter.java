@@ -32,7 +32,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_product, null);
-        ViewHolder viewHolder = new ViewHolder(view);
+        ViewHolder viewHolder = new ViewHolder(view, onCheckedChangeListener);
         return viewHolder;
     }
 
@@ -47,11 +47,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             holder.selection.setChecked(false);
         }
         holder.selection.setTag(position);
-        holder.selection.setOnCheckedChangeListener(onCheckedChangeListener);
+       // holder.selection.setOnCheckedChangeListener(onCheckedChangeListener);
 
     }
 
-    private CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
+     private CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
             list.get((Integer) compoundButton.getTag()).setSelected(b);
@@ -59,22 +59,26 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     };
 
     @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
+    @Override
     public int getItemCount() {
         return list.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public  class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         public TextView mTextViewProductName, mTextViewPrice;
         public CheckBox selection;
 
-        public ViewHolder(View v) {
+        public ViewHolder(View v, CompoundButton.OnCheckedChangeListener onCheckedChangeListener) {
             super(v);
             mTextViewProductName = (TextView) v.findViewById(R.id.name);
             mTextViewPrice = (TextView) v.findViewById(R.id.price);
             selection = (CheckBox) v.findViewById(R.id.selectItem);
-
-
+            selection.setOnCheckedChangeListener(onCheckedChangeListener);
         }
     }
 }

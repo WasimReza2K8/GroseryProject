@@ -50,6 +50,11 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.ViewHolder
         }
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
 
 
 

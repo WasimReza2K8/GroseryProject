@@ -35,6 +35,11 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
     }
 
     @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
+    @Override
     public void onBindViewHolder(ShoppingListAdapter.ViewHolder holder, final int position) {
         String items = "";
 
