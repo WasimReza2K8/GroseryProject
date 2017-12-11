@@ -48,6 +48,11 @@ public class AllProductAdapter extends RecyclerView.Adapter<AllProductAdapter.Vi
         this.mContext = context;
         this.changeItemPosition = changeItemPosition;
     }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
     @Override
     public AllProductAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_all_product, null);
@@ -58,23 +63,24 @@ public class AllProductAdapter extends RecyclerView.Adapter<AllProductAdapter.Vi
     @Override
     public void onBindViewHolder(AllProductAdapter.ViewHolder holder, final int position) {
         holder.mTextViewProductName.setText(list.get(position).getProductName());
-        holder.mEditTextPrice.setText(list.get(position).getPrice()+"");
+        holder.mEditTextPrice.setText(list.get(holder.getAdapterPosition()).getPrice()+"");
         if( list.get(position).getSelected()){
-            holder.mEditTextPrice.setInputType(InputType.TYPE_CLASS_NUMBER);
+          /*  holder.mEditTextPrice.setInputType(InputType.TYPE_CLASS_NUMBER);
             holder.mEditTextPrice.setFocusable(true);
             holder.mEditTextPrice.setFocusableInTouchMode(true); // user touches widget on phone with touch screen
-            holder.mEditTextPrice.setClickable(true);
+            holder.mEditTextPrice.setClickable(true);*/
             holder.selection.setChecked(true);
         } else{
-            holder.mEditTextPrice.setInputType(InputType.TYPE_NULL);
+         /* *//*  holder.mEditTextPrice.setInputType(InputType.TYPE_NULL);
             holder.mEditTextPrice.setFocusable(false);
             holder.mEditTextPrice.setFocusableInTouchMode(false); // user touches widget on phone with touch screen
-            holder.mEditTextPrice.setClickable(false);
+            holder.mEditTextPrice.setClickable(false);*/
             holder.selection.setChecked(false);
            /// holder.mEditTextPrice.setEd(false);
         }
         holder.selection.setTag(position);
         holder.mEditTextPrice.setTag(position);
+//        holder.myCustomEditTextListener.updatePosition(holder.getAdapterPosition());
         holder.mEditTextPrice.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -83,15 +89,15 @@ public class AllProductAdapter extends RecyclerView.Adapter<AllProductAdapter.Vi
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                changeItemPosition.add(position);
+                String item = charSequence.toString();
+                if(item != null && !item.isEmpty()){
+                    list.get(position).setPrice(Float.parseFloat(item));
+                }
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-                /*String item = editable.toString();
-                if(item != null && !item.isEmpty()){
-                    list.get(position).setPrice(Float.parseFloat(item));
-                }*/
+
 
             }
         });
@@ -117,10 +123,14 @@ public class AllProductAdapter extends RecyclerView.Adapter<AllProductAdapter.Vi
             mTextViewProductName =  v.findViewById(R.id.name);
             mEditTextPrice =  v.findViewById(R.id.price);
             selection = v.findViewById(R.id.selectItem);
+          //  this.myCustomEditTextListener = myCustomEditTextListener;
            // selection.setOnCheckedChangeListener(onCheckedChangeListener);
             selection.setOnClickListener(clickListener);
+           // mEditTextPrice.addTextChangedListener(myCustomEditTextListener);
 
 
         }
     }
+
+
 }

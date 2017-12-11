@@ -46,22 +46,24 @@ public class AllProductFragment extends Fragment {
         updateItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                for(Integer position: changeItemPosition){
-                    AllProductAdapter.ViewHolder holder = (AllProductAdapter.ViewHolder)
-                            mRecyclerView.findViewHolderForAdapterPosition(position);
-                    if(holder.mEditTextPrice != null){
-                        String price = holder.mEditTextPrice.getText().toString();
-                        if(price  != null  && !price.isEmpty()){
-                            list.get(position).setPrice(Float.parseFloat(price));
-                            Database.updateProductPrice(list.get(position));
-                            //changeItemPosition.remove(position);
-                        }
-                    }
+                for(ProductDataModel item: list){
+                  if(item.getSelected()){
+                    //  if(item.getPrice()!= null){
+                          //String price = holder.mEditTextPrice.getText().toString();
+                          String price = String.valueOf (item.getPrice());
+                          if(price  != null  && !price.isEmpty()){
+                             // list.get(position).setPrice(Float.parseFloat(price));
+                              Database.updateProductPrice(item);
+                              //changeItemPosition.remove(position);
+                         // }
+                      }
+                  }
+
 
                 }
 
                 resetAllCheckedItem();
-                changeItemPosition.clear();
+               // changeItemPosition.clear();
                // mAdapter.notifyDataSetChanged();
             }
         });
